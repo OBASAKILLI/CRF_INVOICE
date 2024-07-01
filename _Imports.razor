@@ -1,0 +1,17 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.JSInterop
+@using ECAN_INVOICE
+@using ECAN_INVOICE.Shared
+@using MudBlazor
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject ISnackbar Snackbar
+@inject NavigationManager naviagte
+@using System.IO
+@using ECAN_INVOICE.Utils
+@inject ECAN_INVOICE.Interfaces.IUnitOfWork unitOfWork

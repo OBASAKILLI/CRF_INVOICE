@@ -1,0 +1,156 @@
+﻿@page "/"
+@layout HomeLayout
+@inject NavigationManager naviagte
+<PageTitle>Index</PageTitle>
+
+@using System.ComponentModel.DataAnnotations
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2">
+
+        </div> 
+        <div class="col-sm-8">
+              <MudCard Elevation="2" Style="border-radius:8px">
+
+    <div class="row">
+         <div class="col-sm-12 col-lg-6 mt-2" >
+     <MudImage Src="Images/ECAN_CRF.JPEG" Style="height:200px;padding:8px" Class="img-fluid" /> 
+     <MudContainer Class=" align-start justify-content-end mud-width-full ">
+  <div style="font-size:small;color:gray">
+                                <MudIcon Icon="@Icons.Material.Filled.Language" Size="Size.Small" />
+                                    <span style="margin-left:4px" >
+                                        ecan@ac.ke</span>
+                            </div>
+                          <div style="font-size:small;color:gray;margin-top:4px">
+                                <MudIcon Icon="@Icons.Material.Filled.Phone"  Size="Size.Small"/>
+                                <span style="margin-left:4px" >
+                                    020 2264400/0722 207767
+                                </span>
+                            </div>
+                        </MudContainer>
+        </Div>
+  <div class="col-sm-12 col-lg-6 mt-2">
+ <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h5" style="color:#B78F2E">Hi,</MudText>
+                        <MudText Typo="Typo.h5" style="color:#B78F2E">Welcome back.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        @if (isloading)
+                        {
+                            <MudProgressCircular Style="margin-top:8px" Color="Color.Default" Indeterminate="true" />
+                        }
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    <EditForm Model="@users" OnValidSubmit="OnValidSubmit">
+                        <DataAnnotationsValidator />
+                        <MudTextField @bind-Value="users.username" For="@(()=>users.username)" Margin="Margin.Dense" Label="Username" Variant="Variant.Filled"></MudTextField>
+
+                        <MudTextField @bind-Value="users.password" For="@(()=>users.password)" Style="margin-top:6px" Margin="Margin.Dense" Label="Password" Variant="Variant.Filled" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password"></MudTextField>
+
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Style="background-color:#273A56;width:100%;margin:6px" StartIcon="@Icons.Material.Filled.Login" Color="Color.Error">Log In</MudButton>
+                    </EditForm>
+                   
+                    <div style="color:blue;font-size:small;text-align:center;padding:4px">
+                        <u @onclick="PasswordReset">Forget Password?</u>
+                    </div>
+                    <div style="color:gray;font-size:x-small;text-align:center;padding:4px">
+                        By Signing in, you agree to our <a href="#"><u>Terms</u></a> and <a href="#"><u>Conditions</u></a>
+                    </div>
+
+                </MudCardContent>
+
+        </div>
+         
+       
+    </div>
+        
+</MudCard>
+        </div> 
+        <div class="col-sm-2">
+
+        </div>
+    </div>
+    
+</div>
+
+@inject IHttpContextAccessor HttpContextAccessor
+@inject  AuthenticationStateProvider authenticationStateProvider
+@code {
+    protected override Task OnInitializedAsync()
+    { HttpContextAccessor.HttpContext.Session.SetString("JWToken", "");
+        return base.OnInitializedAsync();
+    }
+
+
+
+    protected void PasswordReset()
+    {
+        // CreateAccount
+        naviagte.NavigateTo("/forgot_password");
+    }
+
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void ButtonTestclick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    private bool isloading = false;
+    loginDetails users = new loginDetails();
+    private async Task OnValidSubmit(EditContext context)
+    {
+        isloading = true;
+
+        TokenProvider TokenProvider = new TokenProvider(unitOfWork,HttpContextAccessor);
+        EmailSendStatus userToken = await TokenProvider.LoginUser(users.username, users.password);
+
+        if (userToken.status)
+        {
+            //HttpContextAccessor.HttpContext.Session.Remove("JWToken");
+
+
+            var authstate = await authenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authstate.User;
+            //Task
+            naviagte.NavigateTo("/Dashboard");
+            Snackbar.Add("Successfully Logged into the system", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add(userToken.message, Severity.Error);
+        }
+        isloading = false;
+        StateHasChanged();
+    }
+
+
+
+
+
+    public class loginDetails
+    {
+        [Required(ErrorMessage = "Required Field")]
+      
+        public string username { get; set; }
+        [Required(ErrorMessage = "Required Field")]
+        public string password { get; set; }
+    }
+}

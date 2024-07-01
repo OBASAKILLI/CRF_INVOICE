@@ -1,0 +1,52 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>ECAN_INVOICE</PageTitle>
+
+<div class="page">
+
+
+    <main>
+        <MudThemeProvider />
+        <MudDialogProvider />
+        <MudSnackbarProvider />
+
+        <MudDialogProvider
+    FullWidth="true"
+    MaxWidth="MaxWidth.ExtraSmall"
+    CloseButton="true"
+    DisableBackdropClick="true"
+    NoHeader="true"
+    Position="DialogPosition.Center"
+    CloseOnEscapeKey="true"
+/>
+
+
+        <MudLayout>
+           
+
+            <MudMainContent Class="pt-0 px-0">
+                <body style="background-color:ghostwhite;font-family:Calibri" class="content px-0">
+                    @Body
+                </body>
+            </MudMainContent>
+        </MudLayout>
+
+
+
+    </main>
+</div>
+
+
+
+@code {
+    bool open = true;
+
+    DrawerClipMode clipMode = DrawerClipMode.Never;
+
+    void ToggleDrawer()
+    {
+        open = !open;
+    }
+}
+
+

@@ -1,0 +1,433 @@
+﻿@page "/Dashboard"
+@using ECAN_INVOICE.Models
+@using Microsoft.EntityFrameworkCore
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-8">
+            <h1 style="font-weight:bold;font-family:Calibri;color:#072652">All <span style="color:#B78F2E">Products</span> </h1>
+        </div>
+        <div class="col-4" style="text-align:end">
+            <MudButton OnClick="Open_Credit_Drawer" Class="text-capitalize" Variant="Variant.Filled" Style="background-color:#B78F2E;margin:6px" StartIcon="@Icons.Material.Rounded.Add" Color="Color.Error">Add Product</MudButton>
+
+        </div>
+    </div>
+    <div class="container-fluid">
+
+
+        <div style="text-align:start;margin-top:8px">
+            <div style="font-size:large">
+                All Product
+            </div>
+            <div style="font-size:small;color:gray">
+                List of allProducts
+            </div>
+        </div>
+        <div style="padding:8px;margin:8px">
+            <input @bind="searchString1" @bind:event="oninput" class="form-control border-0" id="myInput" style="background-color:#b2bbc4;color:black;border-radius:30px;font-family:'Century Gothic'" required placeholder="Search" />
+
+        </div>
+        <MudTable Striped=true FixedHeader=true Height="50%" Dense=true Items="@Products_List" Filter="new Func<Product,bool>(FilterFunc1)">
+            <HeaderContent>
+                <MudTh style="background-color:#072652;color:white">
+                   Item
+                </MudTh> 
+                <MudTh style="background-color:#072652;color:white">
+                    Amount
+                </MudTh> 
+                <MudTh style="background-color:#072652;color:white">
+                    S_No
+                </MudTh> 
+                <MudTh style="background-color:#072652;color:white">
+                   DateOfPurchase
+                </MudTh> 
+                <MudTh style="background-color:#072652;color:white">
+                    Supplier_Name
+                </MudTh> 
+                <MudTh style="background-color:#072652;color:white">
+                   Phone
+                </MudTh> 
+                <MudTh style="background-color:#072652;color:white">
+                   DaliveryDate
+                </MudTh>
+                <MudTh style="background-color:#072652;color:white">
+                   ReceivedBy
+                </MudTh>              
+
+                <MudTh style="background-color:#072652;color:white" colspan="2">Action</MudTh>
+
+            </HeaderContent>
+            <RowTemplate>
+                <MudTh>
+                    @context.ItemName
+                </MudTh>
+                <MudTh>
+                    @context.Amount
+                </MudTh>
+                <MudTh>
+                    @context.S_No
+                </MudTh>
+                <MudTh>
+                    @context.DateOfPurchase.ToShortDateString()
+                </MudTh>
+                <MudTh>
+                    @context.Supplier_Name
+                </MudTh>
+                <MudTh>
+                    @context.Phone
+                </MudTh>
+                <MudTh>
+                    @context.DaliveryDate.ToShortDateString()
+                </MudTh>
+                <MudTh>
+                    @context.ReceivedBy
+                </MudTh>
+               
+                <MudTh>
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@(() => Open_Edit_Drawer(context))" StartIcon="@Icons.Material.Filled.Edit" Color="Color.Info" Style="text-transform:none"> Edit</MudButton>
+                </MudTh>
+                <MudTh>
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick="@(()=>OnButtonClicked(context))" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" Style="text-transform:none"> Remove</MudButton>
+                </MudTh>
+
+            </RowTemplate>
+            <NoRecordsContent>
+                <div style="text-align:center;color:red">
+                    No Product   were Found...
+                </div>
+            </NoRecordsContent>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+
+    </div>
+</div>
+
+
+
+
+<!--Create Drawer-->
+
+
+<div class="container-fluid">
+    <MudDrawer @bind-Open="@open_Create" Style="margin-top:24px" Width="650px" Height="auto" Anchor="Anchor.End" Elevation="1" Variant="@DrawerVariant.Temporary">
+
+        <MudDrawerHeader>
+            <MudCard Elevation="0">
+               
+                <MudCardHeader>
+                    <CardHeaderAvatar>
+                        <MudIcon style="color:#B78F2E" Size="Size.Large" Icon="@Icons.Material.Rounded.Add"></MudIcon>
+                    </CardHeaderAvatar>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h5" style="color:#B78F2E"> Add New Product</MudText>
+                        <div style="color:gray;font-size:small"> add new Product into the system </div>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        @if (isloading)
+                        {
+                                <MudProgressCircular Style="margin-top:8px" Color="Color.Default" Indeterminate="true" />
+                        }
+                    </CardHeaderActions>
+                </MudCardHeader>
+            </MudCard>
+        </MudDrawerHeader>
+        <MudDrawerContainer>
+            <div class="container-fluid">
+                <EditForm Model="@product" OnValidSubmit="OnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div hidden>
+                        <MudTextField @bind-Value="product.strId" For="@(()=>product.strId)" Margin="Margin.Dense" Label="id" Variant="Variant.Outlined"></MudTextField>
+
+                    </div>
+                    <br />
+                    <div class="row">
+                          <div class="col-sm-4">
+                              <MudTextField @bind-Value="product.ItemName" For="@(()=>product.ItemName)" Margin="Margin.Dense" Label="Item Name" Variant="Variant.Outlined"></MudTextField>
+                     <br />
+                        </div>
+                        <div class="col-sm-4">
+                             <MudTextField @bind-Value="product.Amount" For="@(()=>product.Amount)" Margin="Margin.Dense" Label="Amount" Variant="Variant.Outlined"></MudTextField>
+                    <br />
+                        </div>
+                        <div class="col-sm-4">
+                             <MudTextField @bind-Value="product.S_No" For="@(()=>product.S_No)" Margin="Margin.Dense" Label="S_No" Variant="Variant.Outlined"></MudTextField>
+                    <br />
+                        </div>
+                      
+
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-4">
+                              <MudTextField @bind-Value="product.Supplier_Name" For="@(()=>product.Supplier_Name)" Margin="Margin.Dense" Label="Supplier Name" Variant="Variant.Outlined"></MudTextField>
+                    <br />
+                        </div>
+                        <div class="col-sm-4">
+                              <MudTextField @bind-Value="product.Phone" For="@(()=>product.Phone)" Margin="Margin.Dense" Label="Phone" Variant="Variant.Outlined"></MudTextField>
+                    <br />
+                        </div>
+                        <div class="col-sm-4">
+                            
+                    <MudTextField @bind-Value="product.ReceivedBy" For="@(()=>product.ReceivedBy)" Margin="Margin.Dense" Label="Received By" Variant="Variant.Outlined"></MudTextField>
+
+                        </div>
+
+                    </div>
+                  
+                  
+                    <MudButton ButtonType="ButtonType.Submit" Class="text-capitalize" Variant="Variant.Filled" Style="background-color:#B78F2E;width:100%;margin:6px;margin-Bottom:24px" StartIcon="@Icons.Material.Rounded.Add" Color="Color.Error">Add Products</MudButton>
+
+                </EditForm>
+            </div>
+        </MudDrawerContainer>
+    </MudDrawer>
+</div>
+<!--Edit Drawer-->
+
+
+<div class="container-fluid">
+    <MudDrawer @bind-Open="@open_Edit" Style="margin-top:24px" Width="650px" Height="auto" Anchor="Anchor.End" Elevation="1" Variant="@DrawerVariant.Temporary">
+        <MudDrawerHeader>
+            <MudCard Elevation="0">
+                <MudCardHeader>
+                    <CardHeaderAvatar>
+
+                        <MudIcon style="color:#B78F2E" Size="Size.Large" Icon="@Icons.Material.Filled.Edit"></MudIcon>
+
+                    </CardHeaderAvatar>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h5" style="color:#B78F2E"> Edit Product</MudText>
+                        <div style="color:gray;font-size:small"> Update Product information </div>
+                    </CardHeaderContent>
+
+                    <CardHeaderActions>
+                        <MudIconButton OnClick="close_Edit_nav" Icon="@Icons.Material.Outlined.Close" aria-label="delete"></MudIconButton>
+                        @if (isloading)
+                        {
+                                <MudProgressCircular Style="margin-top:8px" Color="Color.Default" Indeterminate="true" />
+                        }
+                    </CardHeaderActions>
+                </MudCardHeader>
+            </MudCard>
+        </MudDrawerHeader>
+        <MudDrawerContainer>
+            <EditForm style="padding:8px" Model="@Edit_ItemName" OnValidSubmit="OnValidSubmit_Edit_Entity">
+                <DataAnnotationsValidator />
+
+                <div hidden>
+                        <MudTextField @bind-Value="Edit_ItemName.strId" For="@(()=>Edit_ItemName.strId)" Margin="Margin.Dense" Label="id" Variant="Variant.Outlined"></MudTextField>
+
+                    </div>
+                    <br />
+                    <div class="row">
+                          <div class="col-sm-4">
+                              <MudTextField @bind-Value="Edit_ItemName.ItemName" For="@(()=>Edit_ItemName.ItemName)" Margin="Margin.Dense" Label="Item Name" Variant="Variant.Outlined"></MudTextField>
+                     <br />
+                        </div>
+                        <div class="col-sm-4">
+                             <MudTextField @bind-Value="Edit_ItemName.Amount" For="@(()=>Edit_ItemName.Amount)" Margin="Margin.Dense" Label="Amount" Variant="Variant.Outlined"></MudTextField>
+                    <br />
+                        </div>
+                        <div class="col-sm-4">
+                             <MudTextField @bind-Value="Edit_ItemName.S_No" For="@(()=>Edit_ItemName.S_No)" Margin="Margin.Dense" Label="S_No" Variant="Variant.Outlined"></MudTextField>
+                    <br />
+                        </div>
+                      
+
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-4">
+                              <MudTextField @bind-Value="Edit_ItemName.Supplier_Name" For="@(()=>Edit_ItemName.Supplier_Name)" Margin="Margin.Dense" Label="Supplier Name" Variant="Variant.Outlined"></MudTextField>
+                    <br />
+                        </div>
+                        <div class="col-sm-4">
+                              <MudTextField @bind-Value="Edit_ItemName.Phone" For="@(()=>Edit_ItemName.Phone)" Margin="Margin.Dense" Label="Phone" Variant="Variant.Outlined"></MudTextField>
+                    <br />
+                        </div>
+                        <div class="col-sm-4">
+
+                        <MudTextField @bind-Value="Edit_ItemName.ReceivedBy" For="@(()=>Edit_ItemName.ReceivedBy)" Margin="Margin.Dense" Label="Received By" Variant="Variant.Outlined"></MudTextField>
+
+                        </div>
+
+                    </div>
+                  
+                <MudButton ButtonType="ButtonType.Submit" Class="text-capitalize" Variant="Variant.Filled" Style="background-color:#B78F2E;width:80%;margin:6px;margin-Bottom:24px" StartIcon="@Icons.Material.Filled.Save" Color="Color.Error">Save Changes</MudButton>
+
+            </EditForm>
+        </MudDrawerContainer>
+    </MudDrawer>
+</div>
+
+
+
+
+
+
+<MudMessageBox @ref="mbox" Title="Warning!!." CancelText="Cancel">
+
+    <MessageContent>
+        <MudAlert Severity="Severity.Error">
+            You are about to delete this Product,Are yiu sure you want to continue?
+        </MudAlert>
+
+    </MessageContent>
+    <YesButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Material.Filled.DeleteForever">Delete!</MudButton>
+    </YesButton>
+</MudMessageBox>
+
+@code {
+
+    private string searchString1 = "";
+
+    private bool FilterFunc1(Product element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Product element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+
+        if (element.ItemName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.ItemName} {element.ItemName} {element.ItemName}".Contains(searchString))
+            return true;
+        return false;
+    }
+}
+
+
+@code {
+    Product Edit_ItemName = new Product();
+    private async Task OnValidSubmit_Edit_Entity(EditContext context)
+    {
+        try
+        {
+            await unitOfWork.product.Update(Edit_ItemName);
+            unitOfWork.save();
+            Snackbar.Add($"You Updated {Edit_ItemName.ItemName} Successfully", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        finally
+        {
+            close_Edit_nav();
+        }
+        await loadData();
+        StateHasChanged();
+    }
+}
+
+@code
+{
+    MudMessageBox mbox { get; set; }
+    private async void OnButtonClicked(Product t)
+    {
+        bool? result = await mbox.Show();
+        if (result != null)
+        {
+            DeleteRecord(t);
+        }
+        StateHasChanged();
+    }
+}
+
+@code {
+    protected async void DeleteRecord(Product t)
+    {
+        try
+        {
+            await unitOfWork.product.Remove(t);
+            unitOfWork.save();
+            Snackbar.Add($"You Removed {t.ItemName} from the system", Severity.Error);
+        }
+        catch (DbUpdateException ex)
+        {
+            // Check if the exception is due to related child data.
+            if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE statement conflicted"))
+            {
+                Snackbar.Add("Cannot delete this record because it has related child records.", Severity.Error);
+
+            }
+            else
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+        await loadData();
+        StateHasChanged();
+    }
+}
+
+@code {
+
+
+    bool open_Edit;
+    void Open_Edit_Drawer(Product t)
+    {
+        Edit_ItemName = t;
+        open_Edit = true;
+    }
+    void close_Edit_nav()
+    {
+        Edit_ItemName = new Product();
+        open_Edit = false;
+    }
+
+
+    bool open_Create;
+    void Open_Credit_Drawer()
+    {
+
+        open_Create = true;
+    }
+    void close_Create_nav()
+    {
+        product = new Product();
+        open_Create = false;
+    }
+
+    private bool isloading = false;
+    Product product = new Product();
+    private List<Product> Products_List = new List<Product>();
+    protected override async Task OnInitializedAsync()
+    {
+        await loadData();
+    }
+
+
+
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        isloading = true;
+        try
+        {
+            product.strId = Guid.NewGuid().ToString();
+
+            await unitOfWork.product.AddNew(product);
+            unitOfWork.save();
+            Snackbar.Add($"{product.ItemName} added into the system successfully", Severity.Success);
+
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        finally
+        {
+            product = new Product();
+            isloading = false;
+        }
+        await loadData();
+    }
+
+    public async Task loadData()
+    {
+        Products_List = await unitOfWork.product.GetAll();
+    }
+}

@@ -1,0 +1,68 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = ECAN_INVOICE
+build_property.RootNamespace = ECAN_INVOICE
+build_property.ProjectDir = D:\PROJECTS\ECAN_INVOICE\ECAN_INVOICE\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\PROJECTS\ECAN_INVOICE\ECAN_INVOICE
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Pages/Dashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Pages/LOGIN/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTE9HSU5cSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Shared/Dialog.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXERpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Shared/HomeLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEhvbWVMYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Shared/LoginLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luTGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-rn7vlqtjyg
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-5vnaejgzsq
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-4lmwdppnp9
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PROJECTS/ECAN_INVOICE/ECAN_INVOICE/Pages/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
